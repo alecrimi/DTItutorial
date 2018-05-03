@@ -18,7 +18,7 @@ from dipy.tracking.utils import density_map
 from dipy.tracking import utils
 import matplotlib.pyplot as plt
   
-fimg = "eddycorrected_c.nii.gz"
+fimg = "CrimiSuperStar.nii.gz"
 
 img = nib.load(fimg)
 data = img.get_data()
@@ -26,8 +26,8 @@ affine = img.get_affine()
 header = img.get_header() 
 voxel_size = header.get_zooms()[:3]
 mask, S0_mask = median_otsu(data[:, :, :, 0])
-fbval = "original.bval"
-fbvec = "original.bvec"
+fbval = "CrimiSuperStar.bval"
+fbvec = "CrimiSuperStar.bvec"
 
 bvals, bvecs = read_bvals_bvecs(fbval, fbvec)
 gtab = gradient_table(bvals, bvecs)
@@ -65,3 +65,4 @@ hdr['dim'] = fa.shape
 tensor_streamlines_trk = ((sl, None, None) for sl in csd_streamlines)
 ten_sl_fname = 'tensor_streamlines.trk'
 nib.trackvis.write(ten_sl_fname, tensor_streamlines_trk, hdr, points_space='voxel') 
+
