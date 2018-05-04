@@ -19,7 +19,6 @@ from dipy.tracking import utils
 import matplotlib.pyplot as plt
 
 fimg = "CrimiSuperStar.nii.gz"
-
 img = nib.load(fimg)
 data = img.get_data()
 affine = img.get_affine()
