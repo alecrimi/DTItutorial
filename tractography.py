@@ -66,3 +66,18 @@ tensor_streamlines_trk = ((sl, None, None) for sl in csd_streamlines)
 ten_sl_fname = 'tensor_streamlines.trk'
 nib.trackvis.write(ten_sl_fname, tensor_streamlines_trk, hdr, points_space='voxel') 
 
+
+
+atlas = nib.load('atlas_reg.nii.gz')
+labels = atlas.get_data()
+labelsint = labels.astype(int)
+M = utils.connectivity_matrix(csd_streamlines, labelsint, affine=affine  )
+
+#Remove background
+M = M[1:,1:]
+#Remove the last rows and columns since they are cerebellum and brainstem
+M = M[:90,:90]
+np.fill_diagonal(M,0)
+np.savetxt("connectome.csv", M, delimiter=" ")
+
+
