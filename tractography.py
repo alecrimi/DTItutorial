@@ -17,13 +17,13 @@ from dipy.tracking.utils import density_map
 #from dipy.viz import fvtk
 from dipy.tracking import utils
 import matplotlib.pyplot as plt
-  
+
 fimg = "CrimiSuperStar.nii.gz"
 
 img = nib.load(fimg)
 data = img.get_data()
 affine = img.get_affine()
-header = img.get_header() 
+header = img.get_header()
 voxel_size = header.get_zooms()[:3]
 mask, S0_mask = median_otsu(data[:, :, :, 0])
 fbval = "CrimiSuperStar.bval"
@@ -47,16 +47,16 @@ pmd = peaks_from_model(model=csamodel,
                        mask=mask,
                        return_odf=False)
 
-#Deterministic tractography 
+#Deterministic tractography
 eu = EuDX(a=fa, ind=pmd.peak_indices[..., 0], seeds=2000000, odf_vertices=sphere.vertices, a_low=0.2)
 affine = eu.affine
 csd_streamlines= list(eu)
 
 #Remove tracts shorter than 30mm
 #print np.shape(csd_streamlines)
-from dipy.tracking.utils import length 
+from dipy.tracking.utils import length
 csd_streamlines=[t for t in csd_streamlines if length(t)>30]
- 
+
 #Trackvis
 hdr = nib.trackvis.empty_header()
 hdr['voxel_size'] = img.get_header().get_zooms()[:3]
@@ -64,7 +64,4 @@ hdr['voxel_order'] = 'LAS'
 hdr['dim'] = fa.shape
 tensor_streamlines_trk = ((sl, None, None) for sl in csd_streamlines)
 ten_sl_fname = 'tensor_streamlines.trk'
-nib.trackvis.write(ten_sl_fname, tensor_streamlines_trk, hdr, points_space='voxel') 
- 
-
-
+nib.trackvis.write(ten_sl_fname, tensor_streamlines_trk, hdr, points_space='voxel')
